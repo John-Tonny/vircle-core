@@ -4913,26 +4913,37 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, CVali
     }
 
     if (block.IsProofOfStake()) {
+        LogPrintf("111\n");
         pindex->SetProofOfStake();
+        LogPrintf("222\n");
         pindex->prevoutStake = pblock->vtx[0]->vin[0].prevout;
+        LogPrintf("333\n");
         if (!pindex->pprev
             || (pindex->pprev->bnStakeModifier.IsNull()
                 && pindex->pprev->GetBlockHash() != chainparams.GetConsensus().hashGenesisBlock)) {
+            LogPrintf("444\n");
             // Block received out of order
             if (fVircleMode && !IsInitialBlockDownload()) {
+                LogPrintf("555\n");
                 if (pindex->nFlags & BLOCK_DELAYED) {
+                    LogPrintf("666\n");
                     // block is already delayed
                     state.nFlags |= BLOCK_DELAYED;
                     return true;
                 }
+                LogPrintf("777\n");
                 pindex->nFlags |= BLOCK_DELAYED;
                 return DelayBlock(pblock, state);
+                LogPrintf("888\n");
             }
         } else {
+            LogPrintf("999\n");
             pindex->bnStakeModifier = ComputeStakeModifierV2(pindex->pprev, pindex->prevoutStake.hash);
         }
+        LogPrintf("aaa\n");
         pindex->nFlags &= ~BLOCK_DELAYED;
         setDirtyBlockIndex.insert(pindex);
+        LogPrintf("bbb\n");
     }
 
     if (!ContextualCheckBlock(block, state, chainparams.GetConsensus(), pindex->pprev, true)) {
